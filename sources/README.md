@@ -1,0 +1,1 @@
+This directory contains backups of original source material. It is copied here to prevent link rot. Each source file should have a date in the format YYYY-MM-DD with variable precision if for example the day is not known. 
