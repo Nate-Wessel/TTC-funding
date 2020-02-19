@@ -1,5 +1,5 @@
 library('tidyverse')
-d = read_csv('TTC-fares/fares/annual-fares.csv')
+d = read_csv('TTC-funding/fares/annual-fares.csv')
 
 d %>% 
   gather('Fare','price',-cpi,-year) %>%
