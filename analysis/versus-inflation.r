@@ -14,9 +14,16 @@ fare = read_csv('TTC-funding/fares/nominal-fare-changes.csv') %>%
     Date = round_date(Date,unit='month')
   )
 
+# recession data
+recessions = read_csv('TTC-funding/CPI/recessions.csv') %>%
+  mutate(
+    start = date( parse_date_time(start,'ym') ),
+    end = date( parse_date_time(end,'ym') )
+  )
+
 cpi %>% 
   # join on Date
-  left_join(fare) %>% 
+  left_join(fare) %>%
   # fill in missing values
   fill(`Cash Fare`,`Prepaid Fare`) %>%
   rename(Cash=`Cash Fare`,`Ticket/Token`=`Prepaid Fare`) %>% 
@@ -28,9 +35,14 @@ cpi %>%
     CPI = CPI / max(CPI),
     Inflated = Fare / CPI
   ) %>%
-  ggplot( aes(x=Date) ) + 
-    geom_line(aes(y=Fare,color=`Fare Type`),alpha=0.75) + 
-    geom_line(aes(y=Inflated,color=`Fare Type`)) + 
+  ggplot() +
+    geom_line(aes(x=Date,y=Fare,color=`Fare Type`),alpha=0.75) + 
+    geom_line(aes(x=Date,y=Inflated,color=`Fare Type`)) + 
     scale_colour_manual(values=c('red3','darkcyan')) +
     labs(title='TTC Fares - Nominal and Adjusted for Inflation') + 
-    theme_minimal()
+    theme_minimal() + 
+    geom_rect(
+      data=recessions,
+      aes( xmin=start, xmax=end, ymin=0, ymax=Inf ),
+      fill='pink',alpha=0.5
+    )
