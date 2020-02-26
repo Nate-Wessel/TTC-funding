@@ -1,5 +1,5 @@
 library('tidyverse')
-#library('lubridate')
+library('lubridate')
 
 # read in the monthly CPI data 
 cpi = read_csv('TTC-funding/CPI/CanadaCPI.csv') %>%
@@ -24,10 +24,11 @@ recessions = read_csv('TTC-funding/CPI/recessions.csv') %>%
 cpi %>% 
   # join on Date
   left_join(fare) %>%
+  # adjust passes
+  mutate(`Monthly Pass` = `Monthly Pass` / (365/12*5/7*2) ) %>% 
   # fill in missing values
-  fill(`Cash Fare`,`Prepaid Fare`) %>%
-  rename(Cash=`Cash Fare`,`Ticket/Token`=`Prepaid Fare`) %>% 
-  gather(Cash,`Ticket/Token`,key='Fare Type',value='Fare') %>% 
+  fill(`Cash`,`Ticket/Token`,`Monthly Pass`) %>%
+  gather(Cash,`Ticket/Token`,`Monthly Pass`,key='Fare Type',value='Fare') %>% 
   filter(!is.na(Fare)) %>% 
   group_by(`Fare Type`) %>% 
   # standard CPI to the present
@@ -36,10 +37,9 @@ cpi %>%
     Inflated = Fare / CPI
   ) %>%
   ggplot() +
-    geom_line(aes(x=Date,y=Fare,color=`Fare Type`),alpha=0.75) + 
     geom_line(aes(x=Date,y=Inflated,color=`Fare Type`)) + 
-    scale_colour_manual(values=c('red3','darkcyan')) +
-    labs(title='TTC Fares - Nominal and Adjusted for Inflation') + 
+    scale_colour_manual(values=c('red3','darkcyan','blue')) +
+    labs(title='TTC Fares, Adjusted for Inflation') + 
     theme_minimal() + 
     geom_rect(
       data=recessions,
