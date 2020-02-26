@@ -25,11 +25,14 @@ cpi %>%
   # join on Date
   left_join(fare) %>%
   # adjust passes
-  mutate(`Monthly Pass` = `Monthly Pass` / (365/12*5/7*2) ) %>% 
+  mutate(
+    `Monthly Pass` = `Monthly Pass` / (365/12*5/7*2),
+    `Day Pass` = `Day Pass` / 4
+  ) %>% 
   # fill in missing values
-  fill(`Cash`,`Ticket/Token`,`Monthly Pass`) %>%
-  gather(Cash,`Ticket/Token`,`Monthly Pass`,key='Fare Type',value='Fare') %>% 
-  filter(!is.na(Fare)) %>% 
+  fill(`Cash`,`Ticket/Token`,`Monthly Pass`,`Day Pass`) %>%
+  gather(Cash,`Ticket/Token`,`Monthly Pass`,`Day Pass`,key='Fare Type',value='Fare') %>% 
+  filter(!is.na(Fare) & Fare > 0) %>% 
   group_by(`Fare Type`) %>% 
   # standard CPI to the present
   mutate(
@@ -38,7 +41,7 @@ cpi %>%
   ) %>%
   ggplot() +
     geom_line(aes(x=Date,y=Inflated,color=`Fare Type`)) + 
-    scale_colour_manual(values=c('red3','darkcyan','blue')) +
+    scale_colour_manual(values=c('red3','darkcyan','blue','orange')) +
     labs(title='TTC Fares, Adjusted for Inflation') + 
     theme_minimal() + 
     geom_rect(
