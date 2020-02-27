@@ -32,7 +32,7 @@ cpi %>%
   # fill in missing values
   fill(`Cash`,`Ticket/Token`,`Monthly Pass`,`Day Pass`) %>%
   gather(Cash,`Ticket/Token`,`Monthly Pass`,`Day Pass`,key='Fare Type',value='Fare') %>% 
-  filter(!is.na(Fare) & Fare > 0) %>% 
+  filter( Fare > 0) %>% 
   group_by(`Fare Type`) %>% 
   # standard CPI to the present
   mutate(
