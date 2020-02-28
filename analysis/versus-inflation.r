@@ -35,7 +35,7 @@ cpi %>%
   # fill in missing values
   gather(
     Cash, `Ticket/Token`,
-    `Monthly Pass`, `Day Pass`, `Holiday Pass`,
+    `Monthly Pass`, `Holiday Pass`, `Day Pass`,
     `1 Zone Ticket`, `1 Zone Cash`,
     key='Fare Type',value='Fare'
   ) %>% 
@@ -44,7 +44,7 @@ cpi %>%
   filter( Fare > 0) %>% 
   # standard CPI to the present
   mutate(
-    Inflated = Fare / CPI
+    `2020 Dollar Value` = Fare / CPI
   ) %>%
   ggplot() +
     geom_rect(
@@ -52,9 +52,9 @@ cpi %>%
       aes( xmin=start, xmax=end, ymin=0, ymax=Inf ),
       fill='pink',alpha=0.5
     ) + 
-    geom_line(aes(x=Date,y=Inflated,color=`Fare Type`)) + 
+    geom_line(aes(x=Date,y=`2020 Dollar Value`,color=`Fare Type`)) + 
     scale_colour_manual(
-      values=c('red3','darkcyan','blue','orange','green','red','grey')
+      values=c('red3','darkcyan','blue','orange','darkgreen','red','grey')
     ) +
     labs(title='TTC Fares, Adjusted for Inflation') + 
     theme_minimal()
