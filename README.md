@@ -16,6 +16,7 @@ If citing something new, please make a copy of it in some relatively stable form
 2. 2002 - 2016 A [spreadsheet](https://docs.google.com/spreadsheets/d/1svaHKJL3F5kDFl0zO4rnQesVh0Y8yr5i1yNSGUObe_w/edit?ts=5d8cc5cb#gid=1086639968) on fares compiled by TTCRiders
 3. 1973 - 2012 web archive of [transitstop.net](/sources/transitstop.net/)
 4. 2020 - ???? periodic snapshots of [TTC.ca](/sources/ttc.ca)
+5. 1960 - 2018 archive of [TTC annual reports](/sources/TTC-annual-reports)
 
 # Potential Sources
 
