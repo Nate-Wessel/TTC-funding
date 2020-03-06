@@ -1,6 +1,7 @@
 library('tidyverse')
 library('lubridate')
 library('extrafont')
+loadfonts(quiet=TRUE)
 
 # read in the yearly data 
 a = read_csv(
@@ -20,4 +21,5 @@ a %>%
   filter(!is.na(`count`)) %>% 
   ggplot() +
     geom_area(aes(x=year,y=`count`,fill=`vehicle`),position='stack',alpha=0.5) + 
-    theme_minimal()
+    theme_minimal() + 
+    theme( text=element_text(size=14,family='Charter') )
