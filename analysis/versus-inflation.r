@@ -31,7 +31,6 @@ cpi %>%
     `Day Pass` = `Day Pass` / 4,
     `Holiday Pass` = `Holiday Pass` / 4
   ) %>% 
-  # fill in missing values
   gather(
     Cash, `Ticket/Token`,
     `Monthly Pass`, `Holiday Pass`, `Day Pass`,
