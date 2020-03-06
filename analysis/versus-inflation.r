@@ -1,58 +1,51 @@
 library('tidyverse')
 library('lubridate')
+library('extrafont')
+loadfonts(quiet=TRUE)
+library('scales')
 
 # read in the monthly CPI data 
 cpi = read_csv('TTC-funding/data/CPI/CanadaCPI.csv') %>%
   mutate(
     Date = date( parse_date_time(Date,'ym') ),
-    CPI = CPI / max(CPI)
+    CPI = CPI / max(CPI) # standardize CPI to the present
   )
 
-# read in the fare increase dates
+# read in the periodic fare increase dates
 fare = read_csv('TTC-funding/data/periodic/nominal-fare-changes.csv') %>%
   mutate(
     # round dates to the nearest month, to match CPI
     Date = round_date(Date,unit='month')
   )
 
-# recession data
+# recession periods
 recessions = read_csv('TTC-funding/data/periodic/recessions.csv') %>%
   mutate(
     start = date( parse_date_time(start,'ym') ),
     end = date( parse_date_time(end,'ym') )
   )
 
-cpi %>% 
-  # join on Date
-  left_join(fare) %>%
-  # adjust passes
-  mutate(
-    `Monthly Pass` = `Monthly Pass` / (365/12*5/7*2),
-    `Day Pass` = `Day Pass` / 4,
-    `Holiday Pass` = `Holiday Pass` / 4
-  ) %>% 
-  gather(
-    Cash, `Ticket/Token`,
-    `Monthly Pass`, `Holiday Pass`, `Day Pass`,
-    `1 Zone Ticket`, `1 Zone Cash`,
-    key='Fare Type',value='Fare'
-  ) %>% 
+cpi %>% left_join(fare) %>%
+  select( Date, CPI, `1 Zone Ticket`,`1 Zone Cash`,`Cash`,`Ticket/Token` ) %>% 
+  gather( -Date, -CPI, key='Fare Type', value='Nominal Value' ) %>% 
   group_by(`Fare Type`) %>% 
-  fill( Fare ) %>%
-  filter( Fare > 0) %>% 
-  # standard CPI to the present
-  mutate(
-    `2020 Dollar Value` = Fare / CPI
-  ) %>%
+  fill( `Nominal Value` ) %>% 
+	filter( `Nominal Value` > 0) %>% 
+  mutate( `Real 2020 Value` = `Nominal Value` / CPI ) %>%
+	gather( `Nominal Value`, `Real 2020 Value`, key='Value', value='Fare' ) %>% 
   ggplot() +
-    geom_rect(
-      data=recessions,
-      aes( xmin=start, xmax=end, ymin=0, ymax=Inf ),
-      fill='pink',alpha=0.5
-    ) + 
-    geom_line(aes(x=Date,y=`2020 Dollar Value`,color=`Fare Type`)) + 
+		facet_grid(rows=vars(Value)) + 
+#    geom_rect(
+#      data=recessions,
+#      aes( xmin=start, xmax=end, ymin=0, ymax=Inf ),
+#      fill='pink',alpha=0.5
+#    ) + 
+    geom_step(aes(x=Date,y=Fare,color=`Fare Type`)) + 
     scale_colour_manual(
-      values=c('red3','darkcyan','blue','orange','darkgreen','red','grey')
+      values=c('darkred','coral3','darkblue','darkcyan')
     ) +
-    labs(title='TTC Fares, Adjusted for Inflation') + 
-    theme_minimal()
+    labs(title='Toronto Transit Commission Fares, 1954 - 2020') + 
+    theme_bw(base_size=18, base_family='Charter') +
+		theme( axis.title.x=element_blank() ) + 
+		scale_y_continuous( labels=dollar )
+
