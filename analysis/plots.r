@@ -1,17 +1,16 @@
 library('tidyverse')
 library('lubridate')
-library('extrafont')
-loadfonts(quiet=TRUE)
 library('scales')
 
-# read in the monthly CPI data 
+
+# monthly CPI data 
 cpi = read_csv('TTC-funding/data/CPI/CanadaCPI.csv') %>%
   mutate(
     Date = date( parse_date_time(Date,'ym') ),
     CPI = CPI / max(CPI) # standardize CPI to the present
   )
 
-# read in the periodic fare increase dates
+# periodic fare increase dates
 fare = read_csv('TTC-funding/data/periodic/nominal-fare-changes.csv') %>%
   mutate(
     # round dates to the nearest month, to match CPI
@@ -25,6 +24,21 @@ recessions = read_csv('TTC-funding/data/periodic/recessions.csv') %>%
     end = date( parse_date_time(end,'ym') )
   )
 
+# yearly data 
+a = read_csv(
+    'TTC-funding/data/annual/TTC-annual.csv',
+    skip=2, na='-'
+  ) %>%
+  mutate( year = date( parse_date_time(year,'y') ) )
+
+
+
+# set some theme elements globally
+theme_set( theme_bw(base_size=18, base_family='Charter') ) +
+	theme( axis.title.x=element_blank() )
+
+
+# fares - nominal and inflated
 cpi %>% left_join(fare) %>%
   select( Date, CPI, `1 Zone Ticket`,`1 Zone Cash`,`Cash`,`Ticket/Token` ) %>% 
   gather( -Date, -CPI, key='Fare Type', value='Nominal Value' ) %>% 
@@ -45,7 +59,14 @@ cpi %>% left_join(fare) %>%
       values=c('darkred','coral3','darkblue','darkcyan')
     ) +
     labs(title='Toronto Transit Commission Fares, 1954 - 2020') + 
-    theme_bw(base_size=18, base_family='Charter') +
-		theme( axis.title.x=element_blank() ) + 
 		scale_y_continuous( labels=dollar )
 
+# fleet size 
+a %>% 
+  select( year, standard, trolley, streetcar, subway, SRT ) %>% 
+  gather( -year, key='Vehicle', value='count', factor_key=TRUE ) %>% 
+	filter(!is.na(`count`)) %>% 
+  ggplot() +
+    geom_area(aes(x=year,y=`count`,fill=`Vehicle`),position='stack') + 
+		scale_fill_brewer(palette = 'Accent') +
+		labs(title='Toronto Transit Commission - Fleet Size')
