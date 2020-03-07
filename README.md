@@ -1,10 +1,14 @@
-![Logo](https://raw.githubusercontent.com/Nate-Wessel/TTC-funding/master/analysis/TTC-cash-vs-prepaid-fares.png)
-
 # Purpose
 
 This repository is for organizing and sharing data related to the funding and operations of the Toronto Transit Commission. It focuses specifically on developing a [longitudinal](https://en.wikipedia.org/wiki/Panel_data)/historical database from a variety of reliable sources. Some incidental data like a consumer price index are included as well. 
 
 If you have data or some other primary source not given here, I would _love_ it if you reached out or created a pull request.
+
+# Images
+
+![fare chart](https://raw.githubusercontent.com/Nate-Wessel/TTC-funding/master/analysis/TTC-cash-vs-prepaid-fares.png)
+
+![fleet chart](https://raw.githubusercontent.com/Nate-Wessel/TTC-funding/master/analysis/TTC-fleet-size.png)
 
 # Formats
 Some data are best provided year by year, i.e. standard panel data, while others e.g. fare changes are better recorded as a set of transition points.

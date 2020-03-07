@@ -29,13 +29,14 @@ a = read_csv(
     'TTC-funding/data/annual/TTC-annual.csv',
     skip=2, na='-'
   ) %>%
-  mutate( year = date( parse_date_time(year,'y') ) )
+  mutate( Year = date( parse_date_time(Year,'y') ) )
 
 
 
 # set some theme elements globally
 theme_set( theme_bw(base_size=18, base_family='Charter') ) +
 	theme( axis.title.x=element_blank() )
+
 
 
 # fares - nominal and inflated
@@ -59,14 +60,28 @@ cpi %>% left_join(fare) %>%
       values=c('darkred','coral3','darkblue','darkcyan')
     ) +
     labs(title='Toronto Transit Commission Fares, 1954 - 2020') + 
-		scale_y_continuous( labels=dollar )
+		scale_y_continuous( labels=dollar ) + 
+		xlab(NULL)
 
 # fleet size 
 a %>% 
-  select( year, standard, trolley, streetcar, subway, SRT ) %>% 
-  gather( -year, key='Vehicle', value='count', factor_key=TRUE ) %>% 
+  select( 
+  	Year, 
+  	`Standard Bus` = Standard, 
+  	`Trolley Bus` = Trolley, 
+  	`Wheel-Trans`, 
+  	`Subway Car` = Subway, 
+  	SRT, Streetcar
+  ) %>% 
+  gather( -Year, key='Vehicle Type', value='count', factor_key=TRUE ) %>% 
 	filter(!is.na(`count`)) %>% 
   ggplot() +
-    geom_area(aes(x=year,y=`count`,fill=`Vehicle`),position='stack') + 
+    geom_area(
+    	aes(x=Year,y=`count`,fill=`Vehicle Type`),
+    	position='stack', alpha=0.5, color='black', size=0.1
+    ) + 
 		scale_fill_brewer(palette = 'Accent') +
-		labs(title='Toronto Transit Commission - Fleet Size')
+		labs(title='Toronto Transit Commission - Fleet Size') + 
+		xlab(NULL) + ylab(NULL) + 
+		scale_y_continuous( label=comma )
+
