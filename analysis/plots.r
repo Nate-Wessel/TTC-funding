@@ -85,3 +85,13 @@ a %>%
 		xlab(NULL) + ylab(NULL) + 
 		scale_y_continuous( label=comma )
 
+
+# linked trips
+a %>% 
+	select(Year,linked) %>%
+	ggplot() + 
+		geom_line( aes(x=Year,y=linked) ) + 
+		scale_y_continuous( labels=unit_format(unit="M",scale=1e-6) ) + 
+		expand_limits(y=0) + 
+		labs(title='Toronto Transit Commission - Linked Passenger Trips') + 
+		xlab(NULL) + ylab(NULL)

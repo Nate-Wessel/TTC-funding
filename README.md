@@ -10,6 +10,8 @@ If you have data or some other primary source not given here, I would _love_ it 
 
 ![fleet chart](https://raw.githubusercontent.com/Nate-Wessel/TTC-funding/master/analysis/TTC-fleet-size.png)
 
+![trips chart](https://raw.githubusercontent.com/Nate-Wessel/TTC-funding/master/analysis/linked-trips.png)
+
 # Formats
 Some data are best provided year by year, i.e. standard panel data, while others e.g. fare changes are better recorded as a set of transition points.
 In either case, I am entering data first in [what I hope is a nicely formatted spreadsheet](https://docs.google.com/spreadsheets/d/1gWv1bDCJZJsG3G6BQchv07gDrGD47f3pMxWifyRC5LI/edit?usp=sharing), and then later once that becomes fairly complete, simplifying it into a CSV so it's easier to work with.
