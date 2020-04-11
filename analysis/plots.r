@@ -100,3 +100,17 @@ a %>%
 		expand_limits(y=0) + 
 		labs(title='Toronto Transit Commission - Annual Passenger Fares') + 
 		xlab(NULL) + ylab(NULL)
+
+
+# recovery ratio
+a %>% 
+	select(Year,`recovery ratio`) %>%
+	ggplot() + 
+		geom_rect(
+      data=recessions[-(1:2),],
+      aes( xmin=start, xmax=end, ymin=-Inf, ymax=Inf ),
+      fill='pink',alpha=0.5
+    ) +
+		geom_line( aes(x=Year,y=`recovery ratio`) ) + 
+		labs(title='Toronto Transit Commission - Fare recovery ratio') + 
+		xlab(NULL) + ylab(NULL)
