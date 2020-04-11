@@ -27,14 +27,23 @@ recessions = read_csv('TTC-funding/data/periodic/recessions.csv') %>%
 # yearly data 
 a = read_csv(
     'TTC-funding/data/annual/TTC-annual.csv',
-    skip=2, na='-'
-  ) %>%
+    skip=2, na='-',
+		col_types = cols_only(
+			Year = 'c',
+			provincial = 'n',
+			municipal = 'n',
+			fares = 'n',
+			other = 'n',
+			Standard = 'n',
+			Trolley = 'i',
+			`Wheel-Trans` = 'i',
+			Streetcar = 'i',
+			SRT = 'i',
+			Ferry = 'i'
+		)
+  ) %>% 
   mutate( 
-  	Year = date( parse_date_time(Year,'y') ),
-  	provincial = parse_number(provincial),
-  	municipal = parse_number(municipal),
-  	fares = parse_number(fares),
-  	other_1 = parse_number(other_1)
+  	Year = date( parse_date_time(Year,'y') )
   )
 
 
@@ -122,7 +131,7 @@ a %>%
 # operating funding
 cpi %>% 
 	inner_join( a, by=c("Date"="Year") ) %>%
-  select( Date, CPI, provincial, municipal, fares, other_1 ) %>% 
+  select( Date, CPI, provincial, municipal, fares, other ) %>% 
 	gather( -Date, -CPI, key='Source', value='Value' ) %>% 
 	group_by( Source ) %>% 
 	mutate( Value = Value / CPI ) %>% 
