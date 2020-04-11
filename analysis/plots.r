@@ -29,14 +29,18 @@ a = read_csv(
     'TTC-funding/data/annual/TTC-annual.csv',
     skip=2, na='-'
   ) %>%
-  mutate( Year = date( parse_date_time(Year,'y') ) )
-
+  mutate( 
+  	Year = date( parse_date_time(Year,'y') ),
+  	provincial = parse_number(provincial),
+  	municipal = parse_number(municipal),
+  	fares = parse_number(fares),
+  	other_1 = parse_number(other_1)
+  )
 
 
 # set some theme elements globally
 theme_set( theme_bw(base_size=18, base_family='Charter') ) +
 	theme( axis.title.x=element_blank() )
-
 
 
 # fares - nominal and inflated
@@ -114,3 +118,24 @@ a %>%
 		geom_line( aes(x=Year,y=`recovery ratio`) ) + 
 		labs(title='Toronto Transit Commission - Fare recovery ratio') + 
 		xlab(NULL) + ylab(NULL)
+
+# operating funding
+cpi %>% 
+	inner_join( a, by=c("Date"="Year") ) %>%
+  select( Date, CPI, provincial, municipal, fares, other_1 ) %>% 
+	gather( -Date, -CPI, key='Source', value='Value' ) %>% 
+	group_by( Source ) %>% 
+	mutate( Value = Value / CPI ) %>% 
+	ggplot() + 
+		geom_rect(
+      data=recessions[-(1:2),],
+      aes( xmin=start, xmax=end, ymin=0, ymax=Inf ),
+      fill='pink',alpha=0.5
+    ) +
+	  geom_step( aes(x=Date,y=Value,color=Source) ) + 
+	  #geom_area(
+    #  	aes(x=Date,y=`Value`,fill=`Source`),
+    #  	position='stack', alpha=0.5, color='black', size=0.1
+    #) + 
+		scale_y_continuous( labels=unit_format(unit="B",scale=1e-9) ) + 
+		labs(title='Toronto Transit Commission - Operating funding')
