@@ -10,7 +10,7 @@ If you have data or some other primary source not given here, I would _love_ it 
 
 ![fleet chart](https://raw.githubusercontent.com/Nate-Wessel/TTC-funding/master/analysis/TTC-fleet-size.png)
 
-![trips chart](https://raw.githubusercontent.com/Nate-Wessel/TTC-funding/master/analysis/linked-trips.png)
+![trips chart](https://raw.githubusercontent.com/Nate-Wessel/TTC-funding/master/analysis/revenue-passengers.png)
 
 # Formats
 Some data are best provided year by year, i.e. standard panel data, while others e.g. fare changes are better recorded as a set of transition points.
