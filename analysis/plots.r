@@ -147,4 +147,6 @@ cpi %>%
     #  	position='stack', alpha=0.5, color='black', size=0.1
     #) + 
 		scale_y_continuous( labels=unit_format(unit="B",scale=1e-9) ) + 
-		labs(title='Toronto Transit Commission - Operating funding')
+		labs(title='Toronto Transit Commission - Operations funding') +
+		xlab(NULL) + ylab(NULL)
+
