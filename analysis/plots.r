@@ -37,9 +37,12 @@ a = read_csv(
 			Standard = 'n',
 			Trolley = 'i',
 			`Wheel-Trans` = 'i',
+			Subway = 'i',
 			Streetcar = 'i',
 			SRT = 'i',
-			Ferry = 'i'
+			Ferry = 'i',
+			`revenue passengers` = 'n',
+			`recovery ratio` = 'n'
 		)
   ) %>% 
   mutate( 
@@ -147,6 +150,35 @@ cpi %>%
     #  	position='stack', alpha=0.5, color='black', size=0.1
     #) + 
 		scale_y_continuous( labels=unit_format(unit="B",scale=1e-9) ) + 
-		labs(title='Toronto Transit Commission - Operations funding') +
+		labs(title='Toronto Transit Commission - Real Operations funding') +
+		xlab(NULL) + ylab(NULL)
+
+
+# operating funding STACKED
+cpi %>% 
+	inner_join( a, by=c("Date"="Year") ) %>%
+  select( Date, CPI, provincial, municipal, fares, other ) %>% 
+	gather( -Date, -CPI, key='Source', value='Value' ) %>% 
+	mutate( Source = factor(
+		Source,
+		levels = c('fares','other','municipal','provincial')
+	) ) %>% 
+	group_by( Source ) %>% 
+	mutate( Value = Value / CPI ) %>% 
+	ggplot() + 
+		geom_rect(
+      data=recessions[-(1:2),],
+      aes( xmin=start, xmax=end, ymin=0, ymax=Inf ),
+      fill='pink',alpha=0.5
+    ) +
+	  geom_col(
+      	aes(x=Date,y=`Value`,fill=`Source`),
+      	position='stack', alpha=1, width = 365, color='gray',size=0.2
+    ) + 
+		scale_fill_manual(
+      values=c('darkred','coral3','darkblue','darkcyan')
+    ) +
+		scale_y_continuous( labels=unit_format(unit="B",scale=1e-9) ) + 
+		labs(title='Toronto Transit Commission - Real 2020 Operations Funding') +
 		xlab(NULL) + ylab(NULL)
 
