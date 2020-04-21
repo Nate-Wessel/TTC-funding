@@ -4,18 +4,30 @@ This repository is for organizing and sharing data related to the funding and op
 
 If you have data or some other primary source not given here, I would _love_ it if you reached out via [email](mailto:nate@natewessel.com) or created a pull request.
 
-# Images
+# Dashboard
+Some basic charts visualizing the data in this repository. Feel free to share/reuse them with proper attribution and a link to this repository.
+
+## Fares
+Prior to 1973, the TTC had a zone-based fare scheme. The fares are not directly comparable to the flat fare system we now have, though that system is also incomparable to itself as service has changed dramatically over time. Note that the Ticket/Token category now includes Presto fares. 
 
 ![fare chart](https://raw.githubusercontent.com/Nate-Wessel/TTC-funding/master/analysis/TTC-cash-vs-prepaid-fares.png)
 
+## Level of Service
+
+I should be adding more service characteristics here soon. 
+
 ![fleet chart](https://raw.githubusercontent.com/Nate-Wessel/TTC-funding/master/analysis/TTC-fleet-size.png)
+
+## Demand and Use
 
 ![trips chart](https://raw.githubusercontent.com/Nate-Wessel/TTC-funding/master/analysis/revenue-passengers.png)
 
-![recovery ratio chart](https://raw.githubusercontent.com/Nate-Wessel/TTC-funding/master/analysis/recovery-ratio.png)
+## Funding and Revenue
 
 ![ops funding chart](https://raw.githubusercontent.com/Nate-Wessel/TTC-funding/master/analysis/funding-sources.png)
 (adjusted for inflation)
+
+![recovery ratio chart](https://raw.githubusercontent.com/Nate-Wessel/TTC-funding/master/analysis/recovery-ratio.png)
 
 # Formats
 Some data are best provided year by year, i.e. standard panel data, while others e.g. fare changes are better recorded as a set of transition points.
