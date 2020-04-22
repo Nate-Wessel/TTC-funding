@@ -24,7 +24,7 @@ recessions = read_csv('TTC-funding/data/periodic/recessions.csv') %>%
     end = date( parse_date_time(end,'ym') )
   )
 
-# yearly data 
+# yearly data
 rev_km = read_csv('TTC-funding/data/annual/revenue-km.csv') %>% 
 	 mutate( Year = date( parse_date_time(Year,'y') ) )
 
@@ -56,6 +56,12 @@ a = read_csv(
 theme_set( theme_bw(base_size=18, base_family='Charter') ) +
 	theme( axis.title.x=element_blank() )
 
+# common elements
+recession_bars = geom_rect(
+	data = recessions[-(1:2),],
+	aes( xmin=start, xmax=end, ymin=0, ymax=Inf ),
+	fill = 'pink', alpha = 0.5
+)
 
 # fares - nominal and inflated
 cpi %>% left_join(fare) %>%
@@ -68,11 +74,7 @@ cpi %>% left_join(fare) %>%
 	gather( `Nominal Value`, `Real 2020 Value`, key='Value', value='Fare' ) %>% 
   ggplot() +
 		facet_grid(rows=vars(Value)) + 
-    geom_rect(
-      data=recessions,
-      aes( xmin=start, xmax=end, ymin=0, ymax=Inf ),
-      fill='pink',alpha=0.5
-    ) + 
+    recession_bars + 
     geom_step(aes(x=Date,y=Fare,color=`Fare Type`)) + 
     scale_colour_manual(
       values=c('darkred','coral3','darkblue','darkcyan')
@@ -108,11 +110,7 @@ a %>%
 a %>% 
 	select(Year,`revenue passengers`) %>%
 	ggplot() + 
-		geom_rect(
-      data=recessions[-(1:2),],
-      aes( xmin=start, xmax=end, ymin=0, ymax=Inf ),
-      fill='pink',alpha=0.5
-    ) +
+		recession_bars + 
 		geom_line( aes(x=Year,y=`revenue passengers`) ) + 
 		scale_y_continuous( labels=unit_format(unit="M",scale=1e-6) ) + 
 		expand_limits(y=0) + 
@@ -124,11 +122,7 @@ a %>%
 a %>% 
 	select(Year,`recovery ratio`) %>%
 	ggplot() + 
-		geom_rect(
-      data=recessions[-(1:2),],
-      aes( xmin=start, xmax=end, ymin=-Inf, ymax=Inf ),
-      fill='pink',alpha=0.5
-    ) +
+		recession_bars +
 		geom_line( aes(x=Year,y=`recovery ratio`) ) + 
 		labs(title='Toronto Transit Commission - Fare recovery ratio') + 
 		xlab(NULL) + ylab(NULL)
@@ -141,11 +135,7 @@ cpi %>%
 	group_by( Source ) %>% 
 	mutate( Value = Value / CPI ) %>% 
 	ggplot() + 
-		geom_rect(
-      data=recessions[-(1:2),],
-      aes( xmin=start, xmax=end, ymin=0, ymax=Inf ),
-      fill='pink',alpha=0.5
-    ) +
+		recession_bars +
 	  geom_step( aes(x=Date,y=Value,color=Source) ) + 
 	  #geom_area(
     #  	aes(x=Date,y=`Value`,fill=`Source`),
@@ -168,11 +158,7 @@ cpi %>%
 	group_by( Source ) %>% 
 	mutate( Value = Value / CPI ) %>% 
 	ggplot() + 
-		geom_rect(
-      data=recessions[-(1:2),],
-      aes( xmin=start, xmax=end, ymin=0, ymax=Inf ),
-      fill='pink',alpha=0.5
-    ) +
+		recession_bars +
 	  geom_col(
       	aes(x=Date,y=`Value`,fill=`Source`),
       	position='stack', alpha=1, width = 365, color='gray',size=0.2
@@ -189,7 +175,9 @@ rev_km %>%
 	mutate( metro = total - bus - streetcar ) %>%
 	gather( -Year, key='Mode', value='Revenue Miles' ) %>% 
 	ggplot() +
+		recession_bars +
 		geom_step( aes(x=Year,y=`Revenue Miles`,ymin=0,color=Mode) ) + 
 		scale_y_continuous( labels=unit_format(unit="M",scale=1e-6) ) + 
 		labs(title='Toronto Transit Commission - Revenue Kilometers') +
 		xlab(NULL) + ylab(NULL)
+
