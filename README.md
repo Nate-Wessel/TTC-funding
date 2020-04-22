@@ -14,7 +14,7 @@ Prior to 1973, the TTC had a zone-based fare scheme. The fares are not directly 
 
 ## Level of Service
 
-I should be adding more service characteristics here soon. 
+![revenue kilometers chart](https://raw.githubusercontent.com/Nate-Wessel/TTC-funding/master/analysis/revenue-km.png)
 
 ![fleet chart](https://raw.githubusercontent.com/Nate-Wessel/TTC-funding/master/analysis/TTC-fleet-size.png)
 

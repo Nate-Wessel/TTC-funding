@@ -25,6 +25,9 @@ recessions = read_csv('TTC-funding/data/periodic/recessions.csv') %>%
   )
 
 # yearly data 
+rev_km = read_csv('TTC-funding/data/annual/revenue-km.csv') %>% 
+	 mutate( Year = date( parse_date_time(Year,'y') ) )
+
 a = read_csv(
     'TTC-funding/data/annual/TTC-annual.csv',
     skip=2, na='-',
@@ -48,7 +51,6 @@ a = read_csv(
   mutate( 
   	Year = date( parse_date_time(Year,'y') )
   )
-
 
 # set some theme elements globally
 theme_set( theme_bw(base_size=18, base_family='Charter') ) +
@@ -182,3 +184,12 @@ cpi %>%
 		labs(title='Toronto Transit Commission - Real 2020 Operations Funding') +
 		xlab(NULL) + ylab(NULL)
 
+
+rev_km %>%
+	mutate( metro = total - bus - streetcar ) %>%
+	gather( -Year, key='Mode', value='Revenue Miles' ) %>% 
+	ggplot() +
+		geom_step( aes(x=Year,y=`Revenue Miles`,ymin=0,color=Mode) ) + 
+		scale_y_continuous( labels=unit_format(unit="M",scale=1e-6) ) + 
+		labs(title='Toronto Transit Commission - Revenue Kilometers') +
+		xlab(NULL) + ylab(NULL)
