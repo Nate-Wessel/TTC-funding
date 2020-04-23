@@ -2,7 +2,6 @@ library('tidyverse')
 library('lubridate')
 library('scales')
 
-
 # monthly CPI data 
 cpi = read_csv('TTC-funding/data/CPI/CanadaCPI.csv') %>%
   mutate(
@@ -155,7 +154,6 @@ cpi %>%
 		Source,
 		levels = c('fares','other','municipal','provincial')
 	) ) %>% 
-	group_by( Source ) %>% 
 	mutate( Value = Value / CPI ) %>% 
 	ggplot() + 
 		recession_bars +
