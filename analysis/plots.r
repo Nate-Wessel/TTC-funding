@@ -1,34 +1,35 @@
 library('tidyverse')
 library('lubridate')
 library('scales')
+setwd('/home/nate/scripts/TTC-funding/')
 
 # monthly CPI data 
-cpi = read_csv('TTC-funding/data/CPI/CanadaCPI.csv') %>%
+cpi = read_csv('data/CPI/CanadaCPI.csv') %>%
   mutate(
     Date = date( parse_date_time(Date,'ym') ),
     CPI = CPI / max(CPI) # standardize CPI to the present
   )
 
 # periodic fare increase dates
-fare = read_csv('TTC-funding/data/periodic/nominal-fare-changes.csv') %>%
+fare = read_csv('data/periodic/nominal-fare-changes.csv') %>%
   mutate(
     # round dates to the nearest month, to match CPI
     Date = round_date(Date,unit='month')
   )
 
 # recession periods
-recessions = read_csv('TTC-funding/data/periodic/recessions.csv') %>%
+recessions = read_csv('data/periodic/recessions.csv') %>%
   mutate(
     start = date( parse_date_time(start,'ym') ),
     end = date( parse_date_time(end,'ym') )
   )
 
 # yearly data
-rev_km = read_csv('TTC-funding/data/annual/revenue-km.csv') %>% 
+rev_km = read_csv('data/annual/revenue-km.csv') %>% 
 	 mutate( Year = date( parse_date_time(Year,'y') ) )
 
 a = read_csv(
-    'TTC-funding/data/annual/TTC-annual.csv',
+    'data/annual/TTC-annual.csv',
     skip=2, na='-',
 		col_types = cols_only(
 			Year = 'c',
