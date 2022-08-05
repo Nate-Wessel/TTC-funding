@@ -70,8 +70,8 @@ cpi %>% left_join(fare) %>%
   group_by(`Fare Type`) %>% 
   fill( `Nominal Value` ) %>% 
 	filter( `Nominal Value` > 0) %>% 
-  mutate( `Real 2020 Value` = `Nominal Value` / CPI ) %>%
-	gather( `Nominal Value`, `Real 2020 Value`, key='Value', value='Fare' ) %>% 
+  mutate( `Real 2022 Value` = `Nominal Value` / CPI ) %>%
+	gather( `Nominal Value`, `Real 2022 Value`, key='Value', value='Fare' ) %>% 
   ggplot() +
 		facet_grid(rows=vars(Value)) + 
     recession_bars + 
@@ -79,7 +79,7 @@ cpi %>% left_join(fare) %>%
     scale_colour_manual(
       values=c('darkred','coral3','darkblue','darkcyan')
     ) +
-    labs(title='Toronto Transit Commission Fares, 1954 - 2020') + 
+    labs(title='Toronto Transit Commission Fares, 1954 - 2022') + 
 		scale_y_continuous( labels=dollar ) + 
 		xlab(NULL)
 
