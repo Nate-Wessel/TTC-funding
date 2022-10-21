@@ -1,6 +1,8 @@
-library('tidyverse')
+library('dplyr')
+library('readr')
 library('lubridate')
 library('scales')
+library('tidyr')
 setwd('/home/nate/scripts/TTC-funding/')
 
 # monthly CPI data 
