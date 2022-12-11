@@ -3,6 +3,7 @@ library('readr')
 library('lubridate')
 library('scales')
 library('tidyr')
+library('ggplot2')
 setwd('/home/nate/scripts/TTC-funding/')
 
 # monthly CPI data 
