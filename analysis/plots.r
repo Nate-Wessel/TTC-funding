@@ -68,7 +68,7 @@ recession_bars = geom_rect(
 
 # fares - nominal and inflated
 cpi %>% left_join(fare) %>%
-  select( Date, CPI, `1 Zone Ticket`,`1 Zone Cash`,`Cash`,`Ticket/Token` ) %>% 
+  select( Date, CPI, `1 Zone Ticket`,`1 Zone Cash`,`Cash`,`Prepaid` ) %>% 
   gather( -Date, -CPI, key='Fare Type', value='Nominal Value' ) %>% 
   group_by(`Fare Type`) %>% 
   fill( `Nominal Value` ) %>% 
@@ -82,7 +82,7 @@ cpi %>% left_join(fare) %>%
     scale_colour_manual(
       values=c('darkred','coral3','darkblue','darkcyan')
     ) +
-    labs(title='Toronto Transit Commission Fares, 1954 - 2023') + 
+    labs(title='Toronto Transit Commission Fares, 1954 - 2024') + 
 		scale_y_continuous( labels=dollar ) + 
 		xlab(NULL)
 
